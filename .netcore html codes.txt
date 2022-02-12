@@ -1,0 +1,341 @@
+code for wrapper class(prodcut category detail) public IActionResult printprocatdet()
+        {
+            product pt = new product() { pname = "mobile", pprice = 2500 };
+            category ct = new category() { cname = "oneplus", cdes = "has good speed" };
+            Viewmodel.pro_cat pcobj = new Viewmodel.pro_cat()
+            {
+                productobj = pt,
+            categoryobj = ct
+        };
+              return View(pcobj);
+        }
+-->code for html
+@Model WebApplication1.ViewModel.pro_cat
+<h2>prodcut_category detail</h2>
+
+<table border="2px solid black" style="background-color:antiquewhite;" cellpadding="20px">
+    <tr>
+        <td>pname</td>
+        <td>@Model.productobj.pname</td>
+    </tr>
+    <tr>
+        <td>pprice</td>
+        <td>@Model.productobj.pprice</td>
+    </tr>
+    <tr>
+        <td>cname</td>
+        <td>@Model.categoryobj.cname</td>
+    </tr>
+    <tr>
+        <td>cdes</td>
+        <td>@Model.categoryobj.cdes</td>
+    </tr>
+</table>
+
+-->code for class 
+ public class category
+    {
+        public string cname { get; set; }
+        public string cdes { get; set; }
+    }
+}
+public class product
+    {
+        public string pname { get; set; }
+        public int pprice { get; set; }
+    }
+}
+
+------>strongly typed forms
+ public class studet
+    {
+        public string Fname { get; set; }
+        public string Lname { get; set; }
+        public Boolean workexp{ get; set; }
+
+    }
+
+ public IActionResult form2()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult form2(studet stobj)
+        {
+            ViewData["fname"] = stobj.Fname;
+            ViewData["lname"] = stobj.Lname;
+            if (stobj.workexp == true)
+                ViewData["workexp"] = "Fresher";
+            else
+                ViewData["workexp"] = "experienced";
+            ViewData["fname"] = stobj.Fname;
+            return View();
+        }
+
+@model WebApplication1.Models.studet
+@using (Html.BeginForm("form2", "example", FormMethod.Post))
+{
+    <label>Enter Fname:</label>
+    @Html.TextBoxFor(x => x.Fname)
+    <br />
+    <label>Enter Lname:</label>
+    @Html.TextBoxFor(x => x.Lname)
+    <br />
+    <label>Fresher?:</label>
+    @Html.CheckBoxFor(m => m.workexp )
+    <br />
+
+    <input type="submit" value="submit" />
+}
+<b>
+    Fname:@ViewData["fname"] <br />
+    Lname:@ViewData["lname"] <br />
+    Work Experience:@ViewData["workexp"] <br />
+</b>
+
+
+--->Registration Form
+@using (Html.BeginForm("regform", "example"))
+{
+    <label>Enter Username:</label>
+    @Html.TextBox("Username")
+    <br />
+    <br />
+    <label>Enter Emailid:</label>
+    @Html.TextBox("Emailid")
+    <br />
+    <br />
+    <label>Enter Contactno:</label>
+    @Html.TextBox("Contactno")
+    <br />
+    <br />
+    <label>Enter Age:</label>
+    @Html.TextBox("Age")
+    <br />
+    <br />
+    <label>Select Gender:</label>
+    @Html.RadioButton("Gender", "M")
+    <label>Male</label>
+    @Html.RadioButton("Gender", "F")
+    <label>Female</label>
+    <br />
+    <br />
+
+    <label>Select Qualification:</label>
+    @Html.DropDownList("Course", new List<SelectListItem>
+    {
+    new SelectListItem{Text="<-select->",Value="0"},
+    new SelectListItem{Text="BE/Btech",Value="1"},
+    new SelectListItem{Text="ME/Mtech",Value="2"},
+    new SelectListItem{Text="Degree/Diploma",Value="3"},
+    new SelectListItem{Text="MBA",Value="4"},
+    })
+    <br />
+    <br />
+
+    <label>Job Type:</label>
+    @Html.CheckBox("type", false) <label>Online</label>
+    @Html.CheckBox("type", false) <label>Offline</label>
+    <br />
+    <br />
+
+    <label>Job Location:</label>
+    @Html.DropDownList("city", new List<SelectListItem>{
+    new SelectListItem{Text="<-select->",Value="0"},
+    new SelectListItem{Text="Bangalore",Value="1"},
+    new SelectListItem{Text="pune",Value="2"},
+    new SelectListItem{Text="Delhi",Value="3"},
+    new SelectListItem{Text="Mumbai",Value="3"},
+            })
+    <br />
+    <br />
+
+    <label>Enter Address:</label>
+    @Html.TextArea("address", new { cols = 20, rows = 3 })
+
+    <br />
+    <br />
+
+    <input type="submit" value="Register" />
+    }
+
+---->code for logindet
+ public class logindata
+    {
+        [Required(ErrorMessage = "Please enter Username")]
+        public string Username { get; set; }
+
+        [Required(ErrorMessage = "Please enter Password")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Please enter Mailid")]
+        [EmailAddress(ErrorMessage = "Invalid Mailid")]
+        public string Emailid { get; set; }
+    }
+@model WebApplication1.Models.logindata
+<h2>Login Details</h2>
+
+@using (Html.BeginForm("form3", "example", FormMethod.Post))
+{
+    <label>Enter Username:</label>
+    @Html.TextBoxFor(x => x.Username)
+    @Html.ValidationMessageFor(x => x.Username)
+    <br />
+    <label>Enter Password:</label>
+    @Html.PasswordFor(x => x.Password)
+    @Html.ValidationMessageFor(x => x.Password)
+    <br />
+    <label>Enter Emailid:</label>
+    @Html.TextBoxFor(x => x.Emailid)
+    @Html.ValidationMessageFor(x => x.Emailid)
+    <br />
+
+    <input type="submit" value="Login" />
+}
+
+---->code for radiobutton control
+
+ public class userdata
+    {
+        public string Jobtype { get; set; }
+        public string Jobmode { get; set; }
+
+    }
+
+
+ public IActionResult printradio()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult printradio(userdata obj)
+        {
+            ViewData["type"] = obj.Jobtype;
+            ViewData["mode"] = obj.Jobmode;
+            return View();
+
+        }
+
+
+@model WebApplication1.Models.userdata
+
+<h3>Job Details</h3>
+@using (Html.BeginForm("printradio", "example"))
+{
+    <label>Select Jobtype:</label>
+    @Html.RadioButtonFor(x => x.Jobtype, "Fulltime")
+    <label>Fulltime</label>
+
+    @Html.RadioButtonFor(x => x.Jobtype, "Parttime")
+    <label>Parttime</label>
+    <br />
+    <br />
+
+    <label>Select Jobmode:</label>
+    @Html.RadioButtonFor(x => x.Jobmode, "Online")
+    <label>Online</label>
+
+    @Html.RadioButtonFor(x => x.Jobmode, "Offline")
+    <label>Offline</label>
+    <br />
+    <br />
+
+    <input type="submit" value="submit" />
+}
+<b>
+    Jobtype:@ViewData["type"] <br />
+    Jobmode:@ViewData["mode"]
+<b>
+
+---->Code for binding dropdown list
+public enum coursename
+    {
+        ASP,JAVA,MVC,AJAX,MVCCORE
+    }
+    public class userdet
+    {
+        public coursename selectcname { get; set; }
+    }
+public IActionResult dispddl()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult dispddl(userdet obj)
+        {
+            ViewData["cname"] = obj.selectcname;
+            return View();
+        }
+
+@model WebApplication1.Models.userdet
+<h1>Model binding DDL</h1>
+
+@using (Html.BeginForm("dispddl","example", FormMethod.Post))
+{ 
+    <label>Select coursename:</label>
+
+@Html.DropDownList("selectcname", new SelectList(Enum.GetValues(typeof(coursename))), "--select coursename--")
+<input type="submit" value="submit" />
+}
+
+<b>
+    you have selected:@ViewData["cname"]
+</b>
+
+
+----->code for binding checkbox
+ public class citymodel
+    {
+        public int value { get; set; }
+        public string text { get; set; }
+        public bool ischecked { get; set; }
+
+        public List<citymodel> cities { get; set; }
+    }
+
+ public IActionResult dispcheck()
+        {
+            List<citymodel> obj = new List<citymodel>()
+            {
+                new citymodel{value=1,text="hyderabad",ischecked=true},
+                new citymodel{value=2,text="delhi",ischecked=false},
+                new citymodel{value=3,text="goa",ischecked=false},
+                new citymodel{value=4,text="mumbai",ischecked=false},
+                new citymodel{value=5,text="pune",ischecked=false},
+            };
+            citymodel cmodel = new citymodel();
+            cmodel.cities = obj;
+            return View(cmodel); 
+        }
+        [HttpPost]
+        public IActionResult dispcheck(citymodel obj)
+        {
+            StringBuilder str = new StringBuilder();
+            foreach(var city in obj.cities)
+            {
+                if(city.ischecked)
+                {
+                    str.Append(city.text + ",");
+                }
+            }
+            ViewData["jobloc"] = str;
+            return View("joblocation");
+        }
+    }
+
+--->code for html check box
+@model WebApplication1.Models.citymodel
+<h2>Job location details:</h2>
+
+@using (Html.BeginForm("dispcheck", "example", FormMethod.Post))
+{
+    for (int i = 0; i < Model.cities.Count; i++)
+    {
+        @Html.CheckBoxFor(m => m.cities[i].ischecked)
+        @Model.cities[i].text
+        @Html.HiddenFor(m => m.cities[i].text)
+        @Html.HiddenFor(m => m.cities[i].value)
+<br />
+}
+<input type="submit" value="submit" />
+<strong>you have selected job location:@ViewData["jobloc"] </strong>
